@@ -8,15 +8,42 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+
+
+import VueRouter from 'vue-router'
 import { Form, HasError, AlertError } from 'vform'
+import VueProgressBar from 'vue-progressbar'
+import moment from "moment";
+import swal from 'sweetalert2'
+
+window.swal = swal;
+
+const toast = swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true,
+    onOpen: (toast) => {
+        toast.addEventListener('mouseenter', swal.stopTimer)
+        toast.addEventListener('mouseleave', swal.resumeTimer)
+    }
+})
+
+window.toast = toast;
+
 
 window.form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
-import VueRouter from 'vue-router'
-
 Vue.use(VueRouter)
+
+Vue.use(VueProgressBar, {
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '2px'
+})
 
 let routes = [
     { path: '/dashboard', component: require('./components/Dashboard.vue') },
@@ -29,6 +56,14 @@ const router = new VueRouter({
     routes
 })
 
+
+Vue.filter('upText', function (text) {
+    return text.charAt(0).toUpperCase() + text.slice(1)
+});
+
+Vue.filter('shortDate', function (date) {
+    return moment(date).format('MMMM Do YYYY');
+})
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
