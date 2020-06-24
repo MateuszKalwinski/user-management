@@ -1,1 +1,1 @@
-###Simple app with Laravel and Vue
+## Simple app with Laravel and Vue
