@@ -150,7 +150,7 @@
         },
         created() {
             this.loadUsers();
-            console.log('test');
+            console.log('next');
             setInterval(() => this.loadUsers(), 5000);
         }
     }
