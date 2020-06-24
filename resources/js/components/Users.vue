@@ -36,9 +36,9 @@
                                         <i class="fas fa-edit text-blue"></i>
                                     </a>
                                     /
-                                    <a href="#">
+                                    <button type="button" class="btn-simple" @click="deleteUser(user.id)">
                                         <i class="fas fa-trash text-red"></i>
-                                    </a>
+                                    </button>
                                 </td>
                             </tr>
 
@@ -138,20 +138,62 @@
             },
             createUser(){
                 this.$Progress.start();
-                this.form.post('/api/user');
-                $('#addNew').modal('hide');
-                toast.fire({
-                    icon: 'success',
-                    title: 'User created in successfully'
+                this.form.post('/api/user')
+                .then(() => {
+                    Fire.$emit('AfterCreate');
+                    $('#addNew').modal('hide');
+                    toast.fire({
+                        icon: 'success',
+                        title: 'User created in successfully'
+                    })
+
+                    this.$Progress.finish()
+                })
+                .catch(() => {
+
                 })
 
-                this.$Progress.finish()
             },
+
+            deleteUser(id){
+                swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        this.form.delete('/api/user/' + id)
+                            .then(() => {
+                                swal.fire(
+                                    'Deleted!',
+                                    'User has been deleted.',
+                                    'success'
+                                )
+                                Fire.$emit('AfterCreate');
+                            })
+                            .catch(() => {
+                                swal.fire('Failed!', 'There was something wrong', 'warning');
+                            })
+                    }
+                })
+            }
         },
         created() {
             this.loadUsers();
-            console.log('next');
-            setInterval(() => this.loadUsers(), 5000);
+            Fire.$on('AfterCreate', () => {
+                this.loadUsers();
+            })
+            // setInterval(() => this.loadUsers(), 5000);
         }
     }
 </script>
+<style>
+    .btn-simple{
+        border: none;
+        background: none;
+    }
+</style>

@@ -63,7 +63,9 @@ Vue.filter('upText', function (text) {
 
 Vue.filter('shortDate', function (date) {
     return moment(date).format('MMMM Do YYYY');
-})
+});
+
+window.Fire = new Vue();
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
