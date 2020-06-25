@@ -7,7 +7,7 @@
                         <h3 class="card-title">Users List</h3>
 
                         <div class="card-tools">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#addNew">Add new
+                            <button class="btn btn-success" @click="newModal">Add new
                                 <i class="fas fa-user-plus fa-fw"></i>
                             </button>
                         </div>
@@ -32,9 +32,9 @@
                                 <td>{{user.type | upText}}</td>
                                 <td>{{user.created_at | shortDate}}</td>
                                 <td>
-                                    <a href="#">
+                                    <button type="button" class="btn-simple" @click="editModal(user)">
                                         <i class="fas fa-edit text-blue"></i>
-                                    </a>
+                                    </button>
                                     /
                                     <button type="button" class="btn-simple" @click="deleteUser(user.id)">
                                         <i class="fas fa-trash text-red"></i>
@@ -57,12 +57,12 @@
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addNewLabel">Add new</h5>
+                        <h5 class="modal-title" id="addNewLabel">{{modalTitle}}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form @submit.prevent="createUser">
+                    <form @submit.prevent="editMode? updateUser() : createUser()">
                         <div class="modal-body">
                             <div class="form-group">
                                 <input v-model="form.name" type="text" name="name"
@@ -105,7 +105,9 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <button v-show="editMode" type="submit" class="btn btn-success">Update</button>
+                            <button v-show="!editMode" type="submit" class="btn btn-primary">Create</button>
+
                         </div>
                     </form>
                 </div>
@@ -121,6 +123,7 @@
     export default {
         data() {
             return {
+                editMode: false,
                 users: {},
                 form: new Form({
                     name: '',
@@ -129,10 +132,25 @@
                     type: '',
                     bio: '',
                     photo: '',
-                })
+                }),
+                modalTitle: '',
             }
         },
         methods:{
+
+            editModal(user){
+                this.editMode = true;
+                this.form.reset();
+                this.form.fill(user);
+                this.modalTitle = 'Edit user'
+                $('#addNew').modal('show');
+            },
+            newModal(){
+                this.editMode = false;
+                this.form.reset();
+                this.modalTitle = 'Add new';
+                $('#addNew').modal('show');
+            },
             loadUsers(){
                 axios.get('api/user').then(({data}) => (this.users = data.data));
             },
@@ -152,9 +170,10 @@
                 .catch(() => {
 
                 })
+            },
+            updateUser(){
 
             },
-
             deleteUser(id){
                 swal.fire({
                     title: 'Are you sure?',
@@ -187,7 +206,6 @@
             Fire.$on('AfterCreate', () => {
                 this.loadUsers();
             })
-            // setInterval(() => this.loadUsers(), 5000);
         }
     }
 </script>
