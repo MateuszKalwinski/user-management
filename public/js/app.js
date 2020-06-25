@@ -78060,6 +78060,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             editMode: false,
             users: {},
             form: new __WEBPACK_IMPORTED_MODULE_0_vform___default.a({
+                id: '',
                 name: '',
                 email: '',
                 password: '',
@@ -78106,11 +78107,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 });
 
                 _this2.$Progress.finish();
-            }).catch(function () {});
+            }).catch(function () {
+                _this2.$Progress.fail();
+            });
         },
-        updateUser: function updateUser() {},
-        deleteUser: function deleteUser(id) {
+        updateUser: function updateUser() {
             var _this3 = this;
+
+            this.$Progress.start();
+            this.form.put('api/user/' + this.form.id).then(function () {
+                Fire.$emit('AfterCreate');
+                $('#addNew').modal('hide');
+                toast.fire({
+                    icon: 'success',
+                    title: 'User updated in successfully'
+                });
+                _this3.$Progress.finish();
+            }).catch(function () {
+                _this3.$Progress.fail();
+            });
+        },
+        deleteUser: function deleteUser(id) {
+            var _this4 = this;
 
             swal.fire({
                 title: 'Are you sure?',
@@ -78122,7 +78140,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 confirmButtonText: 'Yes, delete it!'
             }).then(function (result) {
                 if (result.value) {
-                    _this3.form.delete('/api/user/' + id).then(function () {
+                    _this4.form.delete('/api/user/' + id).then(function () {
                         swal.fire('Deleted!', 'User has been deleted.', 'success');
                         Fire.$emit('AfterCreate');
                     }).catch(function () {
@@ -78133,11 +78151,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     created: function created() {
-        var _this4 = this;
+        var _this5 = this;
 
         this.loadUsers();
         Fire.$on('AfterCreate', function () {
-            _this4.loadUsers();
+            _this5.loadUsers();
         });
     }
 });

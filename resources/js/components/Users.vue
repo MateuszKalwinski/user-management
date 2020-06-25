@@ -126,6 +126,7 @@
                 editMode: false,
                 users: {},
                 form: new Form({
+                    id: '',
                     name: '',
                     email: '',
                     password: '',
@@ -168,11 +169,24 @@
                     this.$Progress.finish()
                 })
                 .catch(() => {
-
+                    this.$Progress.fail();
                 })
             },
             updateUser(){
-
+                this.$Progress.start();
+                this.form.put('api/user/'+this.form.id)
+                .then(() => {
+                    Fire.$emit('AfterCreate');
+                    $('#addNew').modal('hide');
+                    toast.fire({
+                        icon: 'success',
+                        title: 'User updated in successfully'
+                    })
+                    this.$Progress.finish()
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+                })
             },
             deleteUser(id){
                 swal.fire({
