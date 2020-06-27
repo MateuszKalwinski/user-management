@@ -224,7 +224,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="offset-sm-2 col-sm-10">
-                                            <button type="submit" class="btn btn-success">Update</button>
+                                            <button @click.prevent="updateInfo" type="submit" class="btn btn-success">Update</button>
                                         </div>
                                     </div>
                                 </form>
@@ -266,13 +266,36 @@
             updateProfile(e){
                 let file = e.target.files[0];
                 let reader = new FileReader();
-
-                reader.onloadend = (file) => {
-                    // console.log('result', reader.result)
-                    this.form.photo = reader.result;
+                console.log(file);
+                // 2111775 is 2MB in bytes
+                if (file['size'] < 2111775){
+                    console.log('test');
+                    reader.onloadend = (file) => {
+                        // console.log('result', reader.result)
+                        this.form.photo = reader.result;
+                    }
+                    reader.readAsDataURL(file);
+                }else{
+                    swal.fire({
+                        type: 'error',
+                        title: 'Ooops...',
+                        text: 'You are uploading to large file',
+                    })
                 }
-                reader.readAsDataURL(file);
+
             },
+
+            updateInfo(){
+                this.$Progress.start();
+                this.form.put('api/profile')
+                .then(() => {
+                    this.$Progress.finish()
+                })
+                .catch(() => {
+                    this.$Progress.fail();
+
+                })
+            }
         },
 
         created() {

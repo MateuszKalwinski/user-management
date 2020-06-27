@@ -77709,21 +77709,41 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var file = e.target.files[0];
             var reader = new FileReader();
+            console.log(file);
+            // 2111775 is 2MB in bytes
+            if (file['size'] < 2111775) {
+                console.log('test');
+                reader.onloadend = function (file) {
+                    // console.log('result', reader.result)
+                    _this.form.photo = reader.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                swal.fire({
+                    type: 'error',
+                    title: 'Ooops...',
+                    text: 'You are uploading to large file'
+                });
+            }
+        },
+        updateInfo: function updateInfo() {
+            var _this2 = this;
 
-            reader.onloadend = function (file) {
-                // console.log('result', reader.result)
-                _this.form.photo = reader.result;
-            };
-            reader.readAsDataURL(file);
+            this.$Progress.start();
+            this.form.put('api/profile').then(function () {
+                _this2.$Progress.finish();
+            }).catch(function () {
+                _this2.$Progress.fail();
+            });
         }
     },
 
     created: function created() {
-        var _this2 = this;
+        var _this3 = this;
 
         axios.get('api/profile').then(function (_ref) {
             var data = _ref.data;
-            return _this2.form.fill(data);
+            return _this3.form.fill(data);
         });
     }
 });
@@ -77924,7 +77944,24 @@ var render = function() {
                     _vm._v(" "),
                     _vm._m(3),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _c("div", { staticClass: "form-group row" }, [
+                      _c("div", { staticClass: "offset-sm-2 col-sm-10" }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-success",
+                            attrs: { type: "submit" },
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.updateInfo($event)
+                              }
+                            }
+                          },
+                          [_vm._v("Update")]
+                        )
+                      ])
+                    ])
                   ])
                 ]
               )
@@ -78233,20 +78270,6 @@ var staticRenderFns = [
             id: "passport"
           }
         })
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group row" }, [
-      _c("div", { staticClass: "offset-sm-2 col-sm-10" }, [
-        _c(
-          "button",
-          { staticClass: "btn btn-success", attrs: { type: "submit" } },
-          [_vm._v("Update")]
-        )
       ])
     ])
   }
