@@ -190,7 +190,7 @@
                                                    placeholder="Email"
                                                    id="email"
                                                    class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                                            <has-error :form="form" field="name"></has-error>
+                                            <has-error :form="form" field="email"></has-error>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -202,8 +202,9 @@
                                                       placeholder="Experience"
                                                       id="bio"
                                                       class="form-control" :class="{ 'is-invalid': form.errors.has('bio') }">
-
                                             </textarea>
+                                            <has-error :form="form" field="bio"></has-error>
+
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -213,13 +214,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="passport" class="col-sm-2 col-form-label">Passport (leave emmpty if not changing)</label>
+                                        <label for="password" class="col-sm-2 col-form-label">Passport (leave emmpty if not changing)</label>
                                         <div class="col-sm-10">
                                             <input type="password"
-                                                   name="passport"
+                                                   v-model="form.password"
+                                                   name="password"
                                                    placeholder="Passport"
-                                                   id="passport"
-                                                   class="form-control">
+                                                   id="password"
+                                                   class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
+                                            <has-error :form="form" field="password"></has-error>
                                         </div>
                                     </div>
                                     <div class="form-group row">
