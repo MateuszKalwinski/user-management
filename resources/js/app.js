@@ -5,16 +5,21 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import Gate from "./gate";
+
 require('./bootstrap');
 
 window.Vue = require('vue');
 
 
-import VueRouter from 'vue-router'
-import { Form, HasError, AlertError } from 'vform'
-import VueProgressBar from 'vue-progressbar'
+import VueRouter from 'vue-router';
+import { Form, HasError, AlertError } from 'vform';
+import VueProgressBar from 'vue-progressbar';
 import moment from "moment";
-import swal from 'sweetalert2'
+import swal from 'sweetalert2';
+import gate from './gate'
+
+Vue.prototype.$gate = new Gate(window.user);
 
 window.swal = swal;
 
@@ -88,7 +93,6 @@ Vue.component(
     'passport-personal-access-tokens',
     require('./components/passport/PersonalAccessTokens.vue')
 );
-console.log('test')
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 

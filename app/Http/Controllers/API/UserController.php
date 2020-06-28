@@ -20,6 +20,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth:api');
+
     }
 
     /**
@@ -97,6 +98,11 @@ class UserController extends Controller
             Image::make($request->photo)->save(public_path('img/profile/').$name);
 
             $request->merge(['photo' => $name]);
+
+            $userPhoto = public_path('img/profile/').$currentPhoto;
+            if (file_exists($userPhoto)){
+                @unlink($userPhoto);
+            }
         }
 
         if (!empty($request->password)){
@@ -139,6 +145,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+        $this->authorize('isAdmin');
+
         $user = User::findOrFail($id);
 
         $user->delete();

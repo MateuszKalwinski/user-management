@@ -5,11 +5,11 @@
                 <div class="card card-widget widget-user">
                     <!-- Add the bg color to the header using any of the bg-* classes -->
                     <div class="widget-user-header text-white" style="background-image: url('./img/user-cover.jpg');">
-                        <h3 class="widget-user-username text-right">Elizabeth Pierce</h3>
+                        <h3 class="widget-user-username text-right">{{this.form.name}}</h3>
                         <h5 class="widget-user-desc text-right">Web Designer</h5>
                     </div>
                     <div class="widget-user-image">
-                        <img class="img-circle" src="" alt="User Avatar">
+                        <img :src="getProfilePhoto()" alt="User Avatar">
                     </div>
                     <div class="card-footer">
                         <div class="row">
@@ -266,7 +266,12 @@
         },
 
         methods: {
-            updateProfile(e){
+            getProfilePhoto(){
+                let photo = (this.form.photo.length > 200) ? this.form.photo : "img/profile/"+ this.form.photo ;
+                return photo;
+            },
+
+            updateProfile(e){0
                 let file = e.target.files[0];
                 let reader = new FileReader();
                 console.log(file);
@@ -293,6 +298,11 @@
                 this.form.put('api/profile')
                 .then(() => {
                     this.$Progress.finish()
+                    Fire.$emit('AfterCreate');
+                    toast.fire({
+                        icon: 'success',
+                        title: 'User updated in successfully'
+                    })
                 })
                 .catch(() => {
                     this.$Progress.fail();
@@ -314,4 +324,19 @@
         background-position:right center;
         background-repeat: no-repeat;
     }
+
+    .widget-user .widget-user-header {
+        padding: 1rem;
+        height: 220px;
+        border-top-left-radius: 0.25rem;
+        border-top-right-radius: 0.25rem;
+    }
+
+    .widget-user .widget-user-image > img {
+        width: 90px;
+        height: auto;
+        border: none;
+        border-radius: 5px;
+    }
+
 </style>
