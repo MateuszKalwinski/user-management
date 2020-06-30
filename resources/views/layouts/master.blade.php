@@ -62,11 +62,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="sidebar">
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                <div class="image">
+                <div class="image d-flex justify-content-center align-items-center">
                     <img src="{{asset('./img/user.png')}}" class="img-circle elevation-2" alt="User Image">
                 </div>
                 <div class="info">
                     <a href="#" class="d-block">{{Auth::user()->name}}</a>
+                    <small>{{Auth::user()->type}}</small>
                 </div>
             </div>
 
