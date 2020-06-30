@@ -58,11 +58,14 @@ let routes = [
     { path: '/developer', component: require('./components/Developer.vue') },
     { path: '/profile', component: require('./components/Profile.vue') },
     { path: '/users', component: require('./components/Users.vue') },
+    { path: '/*', component: require('./components/NotFound.vue') },
+
 ]
 
 const router = new VueRouter({
     mode: 'history',
-    routes
+    routes,
+
 })
 
 
@@ -106,5 +109,13 @@ Vue.component('example-component', require('./components/ExampleComponent.vue'))
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data:{
+        search: '',
+    },
+    methods:{
+        searchit(){
+            Fire.$emit('searching')
+        }
+    }
 });

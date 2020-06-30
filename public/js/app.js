@@ -36404,11 +36404,12 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_3_vue_progressbar___default.a, {
     height: '2px'
 });
 
-var routes = [{ path: '/dashboard', component: __webpack_require__(183) }, { path: '/developer', component: __webpack_require__(186) }, { path: '/profile', component: __webpack_require__(189) }, { path: '/users', component: __webpack_require__(195) }];
+var routes = [{ path: '/dashboard', component: __webpack_require__(183) }, { path: '/developer', component: __webpack_require__(186) }, { path: '/profile', component: __webpack_require__(189) }, { path: '/users', component: __webpack_require__(195) }, { path: '/*', component: __webpack_require__(215) }];
 
 var router = new __WEBPACK_IMPORTED_MODULE_1_vue_router__["a" /* default */]({
     mode: 'history',
     routes: routes
+
 });
 
 Vue.filter('upText', function (text) {
@@ -36439,7 +36440,15 @@ Vue.component('example-component', __webpack_require__(218));
 
 var app = new Vue({
     el: '#app',
-    router: router
+    router: router,
+    data: {
+        search: ''
+    },
+    methods: {
+        searchit: function searchit() {
+            Fire.$emit('searching');
+        }
+    }
 });
 
 /***/ }),
@@ -78314,7 +78323,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("h5", { staticClass: "widget-user-desc text-right" }, [
-                _vm._v("Web Designer")
+                _vm._v(_vm._s(this.form.type))
               ])
             ]
           ),
@@ -79198,6 +79207,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.loadUsers();
         Fire.$on('AfterCreate', function () {
             _this6.loadUsers();
+        });
+        Fire.$on('searching', function () {
+            var query = _this6.$parent.search;
+            axios.get('api/findUser?q=' + query).then(function (data) {
+                _this6.users = data.data;
+            }).catch(function () {});
         });
     }
 });
